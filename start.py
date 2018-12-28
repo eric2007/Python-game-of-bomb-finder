@@ -37,7 +37,7 @@ myStage = stage.Stage()
 mainGroup.add(myStage)
 #初始化控制器
 myStage.init()
-
+ 
 while True:
     for event in pygame.event.get():
         if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
