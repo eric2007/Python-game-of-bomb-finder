@@ -16,7 +16,7 @@ import block
 #   ↘  ↓   ↙
 # 0b 0 00 00
 
-version = 'V0.0.1 beta 3'
+version = 'V0.0.1 beta 4'
 pygame.init()
 
 #填充背景
@@ -37,7 +37,6 @@ myStage = stage.Stage()
 mainGroup.add(myStage)
 #初始化控制器
 myStage.init()
- 
 while True:
     for event in pygame.event.get():
         if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
@@ -57,7 +56,7 @@ while True:
     screen.fill(bgcolor)
 
     # 划线
-    pygame.draw.line(screen,(0,0,0),(1027,0),(1027,1024),5)
+    # pygame.draw.line(screen,(0,0,0),(1027,0),(1027,1024),5)
 
     # 画mainGroup包含的对象
     mainGroup.draw(screen)

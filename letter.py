@@ -1,9 +1,10 @@
+import pygame
 class letter(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, x, y, string, color):
         pygame.sprite.Sprite.__init__(self)
-        font = pygame.font.SysFont('arial',30)
-        self.image = font.render('string',True,(0,0,0))
+        font = pygame.font.Font('font.ttf',30)
+        self.image = font.render(string,True,color)
         self.rect = self.image.get_rect()
-        x = 1 * 126 + 33
-        y = 1 * 126 + 100
         self.rect.topleft = [x,y]
+    def update(self):
+        pass
