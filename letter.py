@@ -1,5 +1,5 @@
 import pygame
-class letter(pygame.sprite.Sprite):
+class Letter(pygame.sprite.Sprite):
     def __init__(self, x, y, string, color):
         pygame.sprite.Sprite.__init__(self)
         font = pygame.font.Font('font.ttf',30)

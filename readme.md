@@ -4,3 +4,4 @@
 #. start the program
 ## needed 
 run <code>python start.py</code>
+### PS. cheats are allowed, the block states are printed on the console, the red bomb is at the number 17 place

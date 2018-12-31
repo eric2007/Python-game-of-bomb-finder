@@ -16,9 +16,8 @@ import block
 #   ↘  ↓   ↙
 # 0b 0 00 00
 
-version = 'V0.0.1 beta 4'
+version = 'V0.0.1 alpha 1'
 pygame.init()
-
 #填充背景
 bgcolor=(255,217,162)
 screen = pygame.display.set_mode([1920, 1280])

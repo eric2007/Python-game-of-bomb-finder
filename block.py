@@ -9,6 +9,8 @@ class Block(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = [self.x, self.y]
     def update(self):
-        pass
-    def clear(self):
+        if self.isHidden:
+            self.image = pygame.image.load(r'empty.gif')
+    def hide(self):
+        print('hide')
         self.isHidden = True

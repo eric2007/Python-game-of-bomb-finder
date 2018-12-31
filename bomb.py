@@ -8,7 +8,7 @@ class Bomb(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = [x,y]
     def update(self):
-        if self.isHidden:
+        if not self.isHidden:
             if(self.color == 'red'):
                 self.image = pygame.image.load(r'gif\bomb-r.gif')
             else:

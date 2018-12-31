@@ -4,6 +4,7 @@ import bomb
 import radar
 import random
 import letter
+import over
 # coding : UTF-8
 class Stage(pygame.sprite.Sprite):
     blocksState = [
@@ -20,21 +21,30 @@ class Stage(pygame.sprite.Sprite):
     radarNum = 0
     blackRadar = []
     redRadar = []
+    blocks = []
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(r'empty.gif')
         self.rect = self.image.get_rect()
         self.rect.topleft = [0,0]
-    
     def init(self):
         for x in range(8):
+            temp = []
             for y in range(8):
                 # print(not blocksState[x][y] & 0x10 == 0)
-                self.groups()[0].add(block.Block(self.getPosX(x), self.getPosY(y)))
+                temp.append(block.Block(self.getPosX(x), self.getPosY(y)))
+            self.blocks.append(temp)
+        for x in range(8):
+            for y in range(8):
+                # print(not blodcksState[x][y] & 0x10 == 0)
+                self.groups()[0].add(self.blocks[x][y])
         self.redBomb = bomb.Bomb('red', 1200, 200)
         self.blackBomb = bomb.Bomb('black', 1200, 200)
+        self.blackBomb.show()
         self.redBomb.setPos(1729, 18)
         self.groups()[0].add(self.blackBomb)
+        self.board = over.Over()
+        self.groups()[0].add(self.board)
         for _ in range(3):
             self.blackRadar.append(radar.Radar('black'))
         for _ in range(3):
@@ -45,6 +55,7 @@ class Stage(pygame.sprite.Sprite):
         for n in range(3):
             self.groups()[0].add(self.redRadar[n])
             self.redRadar[n].setPos(1814, n * 106 + 18)
+        pygame.mouse.set_visible(False)
     # 447 18
     def getPosX(self, pos):
         return pos*126+465
@@ -55,9 +66,9 @@ class Stage(pygame.sprite.Sprite):
     def getBlockYByPos(self,pos):
         return int((pos-18)/126)
     def getBombPosX(self, pos):
-        return pos*126+495
+        return pos*126+477
     def getBombPosY(self, pos):
-        return pos*126+25
+        return pos*126+28
     def getRadarPosX(self, pos):
         return pos*126+457
     def getRadarPosY(self, pos):
@@ -75,7 +86,7 @@ class Stage(pygame.sprite.Sprite):
         elif self.step==2:
             self.putRadar(x, y, self.radarNum)
         elif self.step == 3:
-            pass
+            self.dig(x, y)
     def initLevelTwo(self, x, y):
         # print(x,y)
         redX = (random.randint(0,7))
@@ -104,8 +115,23 @@ class Stage(pygame.sprite.Sprite):
             if num == 2:
                 print(self.blocksState)
                 self.step = 3
+                self.initLevelThree()
             else:
                 self.radarNum += 1
+    def win(self):
+        self.groups()[0].add()
+    def initLevelThree(self):
+        pygame.mouse.set_visible(True)
+    def dig(self, x, y):
+        posX = self.getBlockXByPos(x)
+        posY = self.getBlockYByPos(y)
+        self.digBlock(posX, posY)
+        if self.blocksState[posX][posY] & 0x02 != 0:
+            self.redBomb.show()
+            self.board.win()
+        self.digBlock(random.randint(0,7), random.randint(0,7))
+        if self.blocksState[posX][posY] & 0x01 != 0:
+            self.board.loose()
     def printList(self):
         for m in self.blocksState:
             for n in m:
@@ -113,10 +139,12 @@ class Stage(pygame.sprite.Sprite):
             print()
     def putBlackBomb(self, x, y):
         self.blackBomb.setPos(x, y)
-        self.blackBomb.hide()
     def putRedBomb(self, x, y):
         self.redBomb.setPos(x, y)
         self.redBomb.hide()
+    def digBlock(self, posX, posY):
+        self.blocksState[posX][posY] = 0x0f & self.blocksState[posX][posY]
+        self.blocks[posX][posY].hide()
     def putBlackRadar(self, x, y, posX, posY, num):
         self.blackRadar[num].setPos(x, y)
         n = 0
@@ -137,7 +165,7 @@ class Stage(pygame.sprite.Sprite):
             n += 1
         # except IndexError:
         #     print('crashed')
-        self.groups()[0].add(letter.letter(x + 80, y, str(n), (0,0,0)))
+        self.groups()[0].add(letter.Letter(x + 80, y, str(n), (0,0,0)))
         if n:
             print('dig a bomb')
             # TODO 挖一次炸弹
@@ -156,7 +184,7 @@ class Stage(pygame.sprite.Sprite):
             n += 1
         if posY != 0 and self.blocksState[posX][posY - 1] & 0x01 != 0:
             n += 1
-        self.groups()[0].add(letter.letter(x + 80, y, str(n), (255,0,0)))
+        self.groups()[0].add(letter.Letter(x + 80, y, str(n), (255,0,0)))
         if n:
             print('dig a bomb')
             # TODO 挖一次炸弹
